@@ -1,5 +1,9 @@
 # WA Scanner Tools  
 All scripts are written in Python 3.6.9, but **should** run on legacy versions too, with the correct pip packages.  
+  
+## Released scripts  
+### EmergencyWA_Feed  
+Small Python script that will check the EmergencyWA incident feed every 30 seconds. Provides the incident creation time and GPS coordinates for the incident. Requires the `feedparser, datetime` pip packages.  
 
 ## TODO  
 - ~~EmergencyWA incident feedreader (https://www.emergency.wa.gov.au/data/incident_FCAD.rss)~~  
@@ -13,9 +17,5 @@ All scripts are written in Python 3.6.9, but **should** run on legacy versions t
 - datetime  
 - json  
 - requests  
-    
-  ## Released scripts  
-  ### EmergencyWA_Feed  
-  Small Python script that will check the EmergencyWA incident feed every 30 seconds. Provides the incident creation time and GPS coordinates for the incident. Requires the `feedparser, datetime` pip packages.
   
 Contributions and suggestions are welcome!
