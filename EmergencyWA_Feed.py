@@ -1,9 +1,7 @@
-import feedparser # tested and ran on Python 2.7.17
-import datetime, time
+import feedparser # tested and ran on Python 2.7.17 and 3.6.9
+import datetime, time # script will automatically refresh every 30 seconds, newest incidents are pushed to the bottom of the list, and older incidents are further up
 from time import strftime
 from datetime import date
-
-debugMode = False # toggle debug mode (True or False)
 
 incidentFeed = feedparser.parse("https://www.emergency.wa.gov.au/data/incident_FCAD.rss")
 inc = incidentFeed.entries[1]
@@ -27,40 +25,28 @@ def newLine(): # shortcut to print a new line
     colorText.ENDC
     print("\r")
 
-def debug(): # debug output function
-    print("Current time: " + currentTime)
-    print("Incident feed keys: " + str(inc.keys()) + "\n")
-    print(str(inc) + "\n")
-    print(inc.version)
-    print("\n")
-
 def getIncidents(): # print incident information
-    for inc in reversed(incidentFeed.entries):
+    for inc in incidentFeed.entries:
         print("===========================================================================")
         print(incTitle + inc.title + resetText) # incident type, location and job number
-        print(colorText.GREEN + "Incident reported: " + inc.published) # incident creation timestamp
+        print(colorText.GREEN + "Incident page: " + inc.link) # link to EmergencyWA page for incident
+        print("Incident reported: " + inc.published) # incident creation timestamp
         newLine()
-
+        print(colorText.WARNING + str(inc.summary) + colorText.GREEN) # incident summary
+        newLine()
         print("Coordinates: " + inc.geo_lat + " " + inc.geo_long) # incident coordinates
         print("Map: https://www.google.com/maps/@" + inc.geo_lat + "," + inc.geo_long + ",15z") # incident location via google maps
-        newLine()
-
-        print("Incident page: " + inc.link) # link to EmergencyWA page for incident
         print(resetText + "===========================================================================")
         newLine()
 
 # start of program runtime
-
-if debugMode == True:
-    print("Debug mode enabled")
-    debug() # output the debug info if True
-
-getIncidents() # calls the getIncidents function and prints all active incidents
-
-print(preamble + "EmergencyWA active incidents") # print stats message
-newLine()
-print("Current time: " + colorText.BLUE + currentTime + preamble)
-print("Current incidents: " + colorText.BLUE + str(len(incidentFeed.entries)) + resetText)
-newLine()
+while True:
+    getIncidents() # calls the getIncidents function and prints all active incidents
+    print(preamble + "EmergencyWA active incidents") # print stats message
+    newLine()
+    print("Current time: " + colorText.BLUE + strftime("%Y-%m-%d %H:%M:%S") + preamble)
+    print("Current incidents: " + colorText.BLUE + str(len(incidentFeed.entries)) + resetText)
+    newLine()
+    time.sleep(30)
 
 resetText
