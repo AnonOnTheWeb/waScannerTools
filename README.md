@@ -11,6 +11,7 @@ Another Python script that will display basic information about current alerts a
 - ~~EmergencyWA incident feedreader (https://www.emergency.wa.gov.au/data/incident_FCAD.rss)~~  
 - ~~EmergencyWA alert feedreader (https://www.emergency.wa.gov.au/data/message.rss)~~  
 - Western Power outage feedreader (https://services2.arcgis.com/tBLxde4cxSlNUxsM/arcgis/rest/services/WP_Outage_Prod/FeatureServer/0/?f=json)  
+-  Water Corperation outages (https://www.watercorporation.com.au/gss/events?ts and https://www.watercorporation.com.au/gss/events?ts)  
 - PagerMon feedreader (https://github.com/pagermon/pagermon)  
 - VicEmergency incident feedreader (low priority, https://emergency.vic.gov.au/public/osom-geojson.json)  
 
@@ -19,5 +20,6 @@ Another Python script that will display basic information about current alerts a
 - datetime  
 - json  
 - requests  
+- os  
   
 Contributions and suggestions are welcome!
