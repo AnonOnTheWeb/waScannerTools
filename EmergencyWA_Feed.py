@@ -1,51 +1,50 @@
-import feedparser # tested and ran on Python 2.7.17 and 3.6.9
-import datetime, time, os
+import feedparser, time, os
 from time import strftime
-from datetime import date
+from sys import exit
 
-refreshTime=30 # set how often you'd like the feed to refresh (in seconds)
-incidentFeed = feedparser.parse("https://www.emergency.wa.gov.au/data/incident_FCAD.rss")
+refreshTime = 30 # how often the feed refreshes
+ignore_incident = "Burn Off" # define an incident to ignore
+currentTime = strftime("%Y-%m-%d %H:%M:%S")
+incidentFeed = feedparser.parse("https://www.emergency.wa.gov.au/data/incident_FCAD.rss") # rss feed source
 inc = incidentFeed.entries[1]
 
-class colorText:
+class ct:
     HEADER = '\033[95m'
     ENDC = '\033[0m'
-    EMERGENCY = '\033[91m'
-    WARNING = '\033[93m'
+    RED = '\033[91m'
+    YELLOW = '\033[93m'
     GREEN = '\033[92m'
     BLUE = '\033[94m'
     BOLD = '\033[1m'
     UNDERLINE = '\033[4m'
-
-currentTime = strftime("%Y-%m-%d %H:%M:%S")
-incTitle = colorText.BOLD + colorText.UNDERLINE + colorText.EMERGENCY
-resetText = colorText.ENDC
+    incTitle = BOLD + UNDERLINE + RED
+    preamble = HEADER + BOLD
 
 def newLine(): # shortcut to print a new line
-    colorText.ENDC
-    print("\r")
+    print(ct.ENDC + "\r")
 
 def getIncidents(): # print incident information
     for inc in incidentFeed.entries:
-        print("===========================================================================")
-        print(incTitle + inc.title + resetText) # incident type, location and job number
-        print(colorText.GREEN + "Incident page: " + inc.link) # link to EmergencyWA page for incident
-        print("Incident reported: " + inc.published) # incident creation timestamp
-        newLine()
-        print(colorText.WARNING + "Coordinates: " + inc.geo_lat + " " + inc.geo_long) # incident coordinates
-        print("Map: https://www.google.com/maps/@" + inc.geo_lat + "," + inc.geo_long + ",15z") # incident location via google maps
-        print(resetText + "===========================================================================")
-        newLine()
+        if ignore_incident in inc.title:
+            pass
+        else:
+            print("===========================================================================")
+            print(ct.incTitle + inc.title + ct.ENDC) # incident type, location and job number
+            print(ct.GREEN + "Incident page: " + inc.link) # link to EmergencyWA page for incident
+            print("Incident reported: " + inc.published) # incident creation timestamp
+            print(ct.YELLOW + "Coordinates: " + inc.geo_lat + " " + inc.geo_long) # incident coordinates
+            print("https://www.google.com/maps/@" + inc.geo_lat + "," + inc.geo_long + ",15z") # incident location via google maps
+            print(ct.ENDC + "===========================================================================")
 
-# start of program runtime
-while True:
-    getIncidents() # calls the getIncidents function and prints all active incidents
-    print(colorText.HEADER + colorText.BOLD + "EmergencyWA active incidents") # print stats message
-    newLine()
-    print("Current time: " + colorText.BLUE + strftime("%Y-%m-%d %H:%M:%S") + preamble)
-    print("Current incidents: " + colorText.BLUE + str(len(incidentFeed.entries)) + resetText)
-    newLine()
-    time.sleep(refreshTime)
-    os.system("clear")
+try: # start of program runtime
+    while True:
+        getIncidents()
+        print(ct.preamble + "EmergencyWA active incidents")
+        print(ct.preamble + "Current time: " + ct.BLUE + strftime("%Y-%m-%d %H:%M:%S") + ct.preamble)
+        print("Current incidents: " + ct.BLUE + str(len(incidentFeed.entries)) + ct.ENDC)
+        time.sleep(refreshTime)
+        os.system("clear")
 
-resetText
+except KeyboardInterrupt:
+    print(" Terminating..." + ct.ENDC)
+    sys.exit()
