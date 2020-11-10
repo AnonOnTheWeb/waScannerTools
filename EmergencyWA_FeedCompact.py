@@ -27,7 +27,7 @@ def getIncidents(): # print incident information
         if ignore_incident in inc.title:
             pass
         else:
-            print(ct.INCTITLE + inc.title + ct.ENDC + ct.YELLOW + " | Reported: " + inc.published + ct.ENDC + ct.BLUE + " | Location: " + inc.geo_lat + "," + inc.geo_long)
+            print(ct.INCTITLE + inc.title + ct.ENDC + ct.YELLOW + " | Reported: " + inc.published + ct.ENDC + ct.BLUE + " | Location: {} {}".format(inc.geo_lat, inc.geo_long))
 # start of program runtime
 try:
     while True:
