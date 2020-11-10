@@ -1,6 +1,5 @@
-import feedparser, time, os
+import feedparser, time, os, sys
 from time import strftime
-from sys import exit
 
 refreshTime = 30 # how often the feed refreshes
 ignore_incident = "Burn Off" # define an incident to ignore
@@ -32,8 +31,8 @@ def getIncidents(): # print incident information
             print(ct.incTitle + inc.title + ct.ENDC) # incident type, location and job number
             print(ct.GREEN + "Incident page: " + inc.link) # link to EmergencyWA page for incident
             print("Incident reported: " + inc.published) # incident creation timestamp
-            print(ct.YELLOW + "Coordinates: " + inc.geo_lat + " " + inc.geo_long) # incident coordinates
-            print("https://www.google.com/maps/@" + inc.geo_lat + "," + inc.geo_long + ",15z") # incident location via google maps
+            print(ct.YELLOW + "Coordinates: {} {}".format(inc.geo_lat, inc.geo_long)) # incident coordinates
+            print("https://www.google.com/maps/@{},{},15z".format(inc.geo_lat, inc.geo_long)) # incident location via google maps
             print(ct.ENDC + "===========================================================================")
 
 try: # start of program runtime
